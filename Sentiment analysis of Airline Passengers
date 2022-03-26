@@ -1,6 +1,14 @@
 select *
 from PortfolioProjects..passanger
 
+select Max(Cast([Flight Distance] as float))
+from PortfolioProjects..passanger
+
+select count(Cast([Flight Distance] as float))
+from PortfolioProjects..passanger
+where [Flight Distance] > 1200
+
+
 --------- No of passangers of age between 18 - 40----
 Select count(id)
 from PortfolioProjects..passanger
@@ -60,7 +68,7 @@ round(avg(cast([Cleanliness] as float)), 1) as Cleanliness
 from PortfolioProjects..passanger
 where Age between 18 and 40 and Class = 'Eco' and [Flight Distance] <= 1200;
 
-------- Ratings of passangers of age group 18-40, travelling in Business class and traveeled more then 1200 km-----
+------- Ratings of passangers of age group 18-40, travelling in Business class and traveeled less then 1200 km-----
 
 Select ('Age 18-40, Business Class') as Category, round(avg(cast([Inflight wifi service] as float)),1) as wifi_service,
 round(avg(cast([Departure Arrival time convenient] as float)),1) as D_A_time_convenient,
@@ -247,4 +255,3 @@ from passenger_final
 --(j) Checkin service for all except Age 41-60, busines class We have to maintain the ratings for them
 --(h) Inflight service for all passanger of eco class
 --(i) Cleanliness for all except Age 41-60, busines class We have to maintain the ratings for them
-
