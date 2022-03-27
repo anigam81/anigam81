@@ -17,7 +17,7 @@ where population = ' '
 
 -- deleting data for Northern Cyprus as all the fielids were blank
 delete from PortfolioProjects..[covid-update]
-where = 'Northern Cyprus '
+where location = 'Northern Cyprus '
 
 
 
