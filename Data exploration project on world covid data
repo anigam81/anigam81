@@ -1,0 +1,188 @@
+select *
+from PortfolioProjects..[covid-update]
+
+-- checkcing for null data in continent
+Select *
+from PortfolioProjects..[covid-update]
+where continent = ' '
+
+-- deleting data where continent is null
+delete from PortfolioProjects..[covid-update]
+where continent = ' '
+
+-- checkcing for null data in population
+Select *
+from PortfolioProjects..[covid-update]
+where population = ' '
+
+-- deleting data for Northern Cyprus as all the fielids were blank
+delete from PortfolioProjects..[covid-update]
+where = 'Northern Cyprus '
+
+
+
+--Looking for top 5 countries with max inf
+
+select top 5 location, max(cast(total_cases as float)) as max_total_cases
+from PortfolioProjects..[covid-update]
+group by  location
+order by 2 desc
+
+--Looking for top 5 countries with max inf with respect of their population
+select top 5 location, max(cast(total_cases as float)) as max_total_cases, cast(population as float) as population,(max(cast(total_cases as float))/ cast(population as float))*100 as per_infected
+from PortfolioProjects..[covid-update]
+group by  location, population
+order by 4 desc
+
+--Looking for top 5 countries with max death
+select top 5 location, max(cast(total_deaths as float)) as max_total_deaths
+from PortfolioProjects..[covid-update]
+group by location
+order by 2 desc
+
+--Looking for top 5 countries with max death with respect their population
+select top 5 location, max(cast(total_deaths as float)) as max_total_deaths, cast(population as float) as population, (max(cast(total_deaths as float))/cast(population as float))*100 as perc_death
+from PortfolioProjects..[covid-update]
+group by location, population
+order by 4 desc
+
+--Looking for top 5 countries with max no. of test with resoect of their population
+select top 5 location, max(cast(total_tests as float))as total_tests, population, (max(cast(total_tests as float))/population)*100 as perc_testing
+from PortfolioProjects..[covid-update]
+group by location, population
+order by 4 desc
+
+--Looking for top 5 countries with max no. of vacination with resoect of their population
+
+select top 5 location, max(cast(total_vaccinations as float)) as vaccinations,cast( population as float) as population, (max(cast(total_vaccinations as float))/cast( population as float))*100 as perc_vaccination
+from PortfolioProjects..[covid-update]
+group by location, population
+order by 4 desc
+
+--Lets take a look for numbers in india
+
+--1. Peak of covid infection in india----
+
+select location, date, cast(new_cases as float) as new_cases
+from PortfolioProjects..[covid-update]
+where location = 'India'
+order by 3 desc
+
+
+--2. Max vaccination in india on a perticular date---
+
+
+select location, date, cast(new_vaccinations as float) as new_vaccinations
+from PortfolioProjects..[covid-update]
+where location = 'India'
+order by 3 desc
+
+
+--3. Peak of deaths in India -----
+
+select location, date, cast(new_deaths as float) as new_deaths
+from PortfolioProjects..[covid-update]
+where location = 'India'
+order by 3 desc
+
+
+------ craeting temp table of global numbers having percentage and then joing them for finding any co-realtion
+
+create table #1tc 
+(
+location varchar(250), 
+max_total_cases float,
+population float,
+perc_infected float
+);
+
+insert into #1tc
+select location, max(cast(total_cases as float)) as max_total_cases, cast(population as float) as population,(max(cast(total_cases as float))/ cast(population as float))*100 as per_infected
+from PortfolioProjects..[covid-update]
+group by  location, population
+order by 4 desc;
+
+
+create table #2td
+(
+location varchar(250), 
+max_toatl_deaths float, 
+population float, 
+perc_death float
+);
+
+insert into #2td
+select location, max(cast(total_deaths as float)) as max_total_deaths, cast(population as float) as population, (max(cast(total_deaths as float))/cast(population as float))*100 as perc_death
+from PortfolioProjects..[covid-update]
+group by location, population
+order by 4 desc;
+
+
+create table #3tt
+(
+location varchar(250), 
+toatl_tests float, 
+population float, 
+perc_testing float
+);
+
+insert into #3tt
+select location, max(cast(total_tests as float))as total_tests, population, (max(cast(total_tests as float))/population)*100 as perc_testing
+from PortfolioProjects..[covid-update]
+group by location, population
+order by 4 desc;
+
+create table #4tv
+(
+location varchar(250), 
+total_vaccinations float, 
+population float, 
+perc_vaccination float
+);
+
+insert into #4tv
+select location, max(cast(total_vaccinations as float)) as vaccinations,cast( population as float) as population, (max(cast(total_vaccinations as float))/cast( population as float))*100 as perc_vaccination
+from PortfolioProjects..[covid-update]
+group by location, population
+order by 4 desc;
+
+select *
+from #1tc a, #2td b, #3tt c, #4tv d
+where a.location = b.location and b.location = c.location and c.location = d.location and d.location = a.location
+
+select a.location, perc_death, perc_infected, perc_testing, perc_vaccination
+from #1tc a, #2td b, #3tt c, #4tv d
+where a.location = b.location and b.location = c.location and c.location = d.location and d.location = a.location
+
+
+------ eliminating countries with 0 death bcoz countries with zero death has incomplete data in another feilds also--------
+select a.location, perc_death, perc_infected, perc_testing, perc_vaccination
+from #1tc a, #2td b, #3tt c, #4tv d
+where a.location = b.location and b.location = c.location and c.location = d.location and d.location = a.location
+and perc_death <> 0
+
+------ Creating final table for analysis------------
+
+create table covid_final
+(
+location varchar(250),
+perc_death float,
+perc_infected float,
+perc_testing float,
+perc_vaccination float
+)
+
+insert into covid_final
+select a.location, perc_death, perc_infected, perc_testing, perc_vaccination
+from #1tc a, #2td b, #3tt c, #4tv d
+where a.location = b.location and b.location = c.location and c.location = d.location and d.location = a.location
+and perc_death <> 0
+
+
+select location, round(perc_death, 2) as perc_death, round(perc_testing, 2) as perc_testing, round(perc_infected, 2) as perc_infected, round(perc_vaccination, 2) as perc_vaccination
+from covid_final
+order by 2 desc
+
+
+--Also We identified the the increase in testing were able to determine the infection
+--but unfortunately this coud not prevent deaths as there is no realation found between the deaths and testing
