@@ -38,15 +38,10 @@ from PortfolioProjects..NashvilleHousing a, PortfolioProjects..NashvilleHousing 
 where a.ParcelID = b.ParcelID and a.[UniqueID ] <> b.[UniqueID ] and a.PropertyAddress is null
 
 --populating address into diffrent coloumn (Address, city, state)------------------
-select PropertyAddress
+select Owneraddress
 from PortfolioProjects..NashvilleHousing
+where Owneraddress is not null
 
-select 
-PARSENAME(replace(Owneraddress , ',', '.') , 3) as address,
-PARSENAME(replace(Owneraddress , ',', '.') , 2) as city ,
-PARSENAME(replace(Owneraddress , ',', '.') , 1) as state
-
-from portfolioprojects.dbo.NashvilleHousing 
 select 
 PARSENAME(replace(Owneraddress , ',', '.') , 3) as address,
 PARSENAME(replace(Owneraddress , ',', '.') , 2) as city ,
