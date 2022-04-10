@@ -221,17 +221,17 @@ Select *
 from passenger_final
 
 --- Outcomes of the project--
---1. We have segregated the data by, Age, Travelling class and flight distance
---2. For age we have taken two goups of age between 18 -40 & 41 -60 as 85.5% of total passgeners lies in it
---3. For travelling class we have taken Eco & Business class as 93.6% of total passgeners lies in it
---4. For distance we have taken flight distance less then 1200 as 65 % of total passgeners lies in it
+--1. I have segregated the data by, Age, Travelling class and flight distance
+--2. For age I have taken two goups of age between 18 -40 & 41 -60 as 85.5% of total passgeners lies in it
+--3. For travelling class I have taken Eco & Business class as 93.6% of total passgeners lies in it
+--4. For distance I have taken flight distance less then 1200 as 65 % of total passgeners lies in it
 
---We have created 4 ctaegorise of passangers using the above variables and calculated average ratings across all the categories
+--I have created 4 ctaegorise of passangers using the above variables and calculated average ratings across all the categories
 --whcih can be seen below using the following command
 Select *
 from passenger_final
 
---5. Based on the above ratings we have created action plan for the airline in 3 phases
+--5. Based on the above ratings I have created action plan for the airline in 3 phases
 --(a) Immideate action required where the average ratings are below 3
 --(b) Moderate action requrired where the average ratings lies between 3 - 3.5
 --(c) Maintain where teh average rating is above 3.5
