@@ -29,12 +29,12 @@ Select count(id)
 from PortfolioProjects..passanger
 where Class = 'Eco' ------ 46745-------
 
-----------No of passangers in Eco Plus class-----
+----------No of passangers in Eco Plus class----
 Select count(id)
 from PortfolioProjects..passanger
 where Class = 'Eco Plus' -------7494----------
 
-----------No of passangers in Business class-----
+----------No of passangers in Business class----
 Select count(id)
 from PortfolioProjects..passanger
 where Class = 'Business' ---------49665------
