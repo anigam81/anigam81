@@ -63,27 +63,37 @@ order by 4 desc
 
 --1. Peak of covid infection in india----
 
+with cte as (
 select location, date, cast(new_cases as float) as new_cases
 from PortfolioProjects..[covid-update]
-where location = 'India'
-order by 3 desc
+where location = 'India') 
+select location, date, new_cases
+from cte
+where new_cases =(select max(new_cases) from cte)
+
 
 
 --2. Max vaccination in india on a perticular date---
 
 
+with cte as (
 select location, date, cast(new_vaccinations as float) as new_vaccinations
 from PortfolioProjects..[covid-update]
-where location = 'India'
-order by 3 desc
+where location = 'India') 
+select location, date, new_vaccinations
+from cte
+where new_vaccinations =(select max(new_vaccinations) from cte)
 
 
 --3. Peak of deaths in India -----
 
+with cte as (
 select location, date, cast(new_deaths as float) as new_deaths
 from PortfolioProjects..[covid-update]
-where location = 'India'
-order by 3 desc
+where location = 'India') 
+select location, date, new_deaths
+from cte
+where new_deaths =(select max(new_deaths) from cte)
 
 
 ------ craeting temp table of global numbers having percentage and then joing them for finding any co-realtion
